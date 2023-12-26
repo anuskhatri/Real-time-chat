@@ -5,11 +5,6 @@ import { AuthContext } from "../../context/AuthContext"
 const PotentialChat = () => {
     const { potentialChat, createChat, onlineUsers } = useContext(ChatContext)
     const { user } = useContext(AuthContext)
-    if (potentialChat.length < 1) {
-        return <>
-            <p style={{ margin: '5%', fontSize: "30px" }}>Loading Users....</p>
-        </>
-    }
     return (
         <>
             <div className="all-users">

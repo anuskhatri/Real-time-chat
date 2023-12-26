@@ -121,7 +121,7 @@ export const ChatContextProvider = ({ children, user }) => {
           // To get the user with whom we don't have a created chat
           let isChatCreated = false
 
-          if (Number(user.id) === Number(u.id)) {
+          if (Number(user?.id) === Number(u.id)) {
             return false
           } // Remove our user_id
 
@@ -139,7 +139,7 @@ export const ChatContextProvider = ({ children, user }) => {
       }
     }
     getUser()
-  }, [userChat])
+  }, [userChat,])
 
   // Get Message
   useEffect(() => {
