@@ -18,7 +18,7 @@ const NavBar = () => {
                     <Nav.Link href="#">Hi {user ? user.name : ''}</Nav.Link>
                   </Stack>
                   <Stack gap={10}>
-                    {/* <Notification /> */}
+                    <Notification />
                   </Stack>
                 </>
                 :

@@ -38,14 +38,12 @@ export const AuthContextProvider = ({ children }) => {
     } 
     else {
       setUser(null)
-      console.log('Token not found in localStorage')
     }
   }
 
 
   const registerUser = useCallback(async (e) => {
-    e.preventDefault()
-
+    // e.preventDefault()
     setRegisterError(null)
     setRegisterLoading(true)
 
@@ -64,7 +62,6 @@ export const AuthContextProvider = ({ children }) => {
   }
 
   const loginUser = useCallback(async (e) => {
-    e.preventDefault()
     setLoginError(null)
     setLoginLoading(true)
 

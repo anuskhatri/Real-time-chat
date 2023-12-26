@@ -183,21 +183,21 @@ body {
 .notification-count {
   display: flex;
   background: #00bd9b;
-  height: 25px;
-  width: 25px;
+  height: 17px;
+  width: 15px;
   font-size: 14px;
   font-weight: 700;
   border-radius: 50%;
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: -10px;
-  right: -15px;
+  top: 7px;
+  left: 364px;
 }
 
 .this-user-notifications {
   display: flex;
-  background: #00bd9b;
+  background: #00bd9b !important;
   height: 20px;
   width: 20px;
   font-size: 12px;

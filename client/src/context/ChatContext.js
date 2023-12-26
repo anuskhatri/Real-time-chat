@@ -10,9 +10,10 @@ export const ChatContextProvider = ({ children, user }) => {
   const [userChatError, setUserChatError] = useState(null)
   const [potentialChat, setPotentialChat] = useState([])
   const [currentChat, setCurrentChat] = useState(null)
+  const [allUser, setAllUser] = useState(null)
 
   // Get mesage
-  const [userMessage, setUserMessage] = useState(null)
+  const [userMessage, setUserMessage] = useState([])
   const [isUserMessagesLoading, setIsUserMessagesLoading] = useState(false)
   const [userMessageError, setUserMessageError] = useState(null)
 
@@ -34,7 +35,6 @@ export const ChatContextProvider = ({ children, user }) => {
   const updateCurrentChat = useCallback(async (chat) => {
     setCurrentChat(chat)
   }, [])
-  console.log(notification);
 
   // Socket 
   useEffect(() => {
@@ -83,7 +83,6 @@ export const ChatContextProvider = ({ children, user }) => {
     })
 
     socket.on("getNotification", (res) => {
-      console.log(res);
       const isChatOpen = currentChat?.members.some((id) => id === res.senderId)
       if (isChatOpen) {
         setNotification(prev => [
@@ -91,8 +90,8 @@ export const ChatContextProvider = ({ children, user }) => {
           ...prev
         ]);
       } else {
-        setNotification(prev => [{...res}, ...prev]);
-      }       
+        setNotification(prev => [{ ...res }, ...prev]);
+      }
     })
     return () => {
       socket.off("getMessage")
@@ -117,7 +116,8 @@ export const ChatContextProvider = ({ children, user }) => {
     const getUser = async () => {
       try {
         const response = await getReq(`${baseUrl}/api/user`)
-
+        console.log(response);
+        setAllUser(response)
         const pchats = response.filter((u) => {
           // To get the user with whom we don't have a created chat
           let isChatCreated = false
@@ -176,8 +176,57 @@ export const ChatContextProvider = ({ children, user }) => {
       setIsUserChatsLoading(false)
     }
     getUserChat()
-  }, [user])
+  }, [user,notification])
 
+  const markAllNotificationRead = useCallback((notification) => {
+    const mNotification = notification.map((n) => {
+      return { ...n, isRead: true }
+    })
+    setNotification(mNotification)
+
+  }, [])
+
+  const markNotificationRead = useCallback((n, userChat, user, notifications) => {
+    // find chat to open
+    const desiredChat = userChat.find(chat => {
+      const chatMembers = [Number(user.id), Number(n.senderId)]
+      const isDesireChat = chat?.members.every((member) => {
+        return chatMembers.includes(Number(member))
+      })
+      return isDesireChat
+    })
+    // mark notification as read
+    const mNotification = notifications.map((el) => {
+      if (Number(n.senderId) === Number(el.senderId)) {
+        return { ...n, isRead: true }
+      }
+      else {
+        return el
+      }
+    })
+    updateCurrentChat(desiredChat)
+    setNotification(mNotification)
+  }, [])
+
+  const markThisNotificationRead = useCallback((thisUserNotification, notification) => {
+    const mNotification = notification.map((el) => {
+      let updatedNotification = el;
+
+      thisUserNotification.forEach((n) => {
+        console.log("this user notification", n.senderId);
+        console.log("notification", el);
+        if (n?.senderId === el?.senderId) {
+          console.log("true");
+          updatedNotification = { ...n, isRead: true };
+        }
+      });
+
+      console.log(updatedNotification);
+      return updatedNotification;
+    });
+    console.log(mNotification);
+    setNotification(mNotification);
+  });
 
 
   return (
@@ -197,7 +246,11 @@ export const ChatContextProvider = ({ children, user }) => {
         newMessage,
         onlineUsers,
         notification,
+        allUser,
+        markNotificationRead,
+        markAllNotificationRead,
         updateCurrentChat,
+        markThisNotificationRead
       }}
     >
       {children}
