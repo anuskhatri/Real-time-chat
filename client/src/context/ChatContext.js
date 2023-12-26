@@ -116,7 +116,6 @@ export const ChatContextProvider = ({ children, user }) => {
     const getUser = async () => {
       try {
         const response = await getReq(`${baseUrl}/api/user`)
-        console.log(response);
         setAllUser(response)
         const pchats = response.filter((u) => {
           // To get the user with whom we don't have a created chat
@@ -213,18 +212,13 @@ export const ChatContextProvider = ({ children, user }) => {
       let updatedNotification = el;
 
       thisUserNotification.forEach((n) => {
-        console.log("this user notification", n.senderId);
-        console.log("notification", el);
         if (n?.senderId === el?.senderId) {
-          console.log("true");
           updatedNotification = { ...n, isRead: true };
         }
       });
 
-      console.log(updatedNotification);
       return updatedNotification;
     });
-    console.log(mNotification);
     setNotification(mNotification);
   });
 

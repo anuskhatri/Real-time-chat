@@ -1,0 +1,6 @@
+{
+    "scripts": {
+        "start": "node start-app.js",
+        "install": "node install-pack.js"
+    }
+}

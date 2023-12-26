@@ -13,7 +13,6 @@ const useFetchLatestMessage = (chat) => {
                 return
             }
             const lastMessage = response[response?.length - 1]
-            console.log("latestMessage",lastMessage);
             setLatestMessage(lastMessage)
         }
         getMessage()
